@@ -1,0 +1,30 @@
+#define BLYNK_TEMPLATE_ID "YourTemplateID"
+#define BLYNK_TEMPLATE_NAME "SmartWallet"
+#define BLYNK_AUTH_TOKEN "YourAuthToken"
+
+#include <WiFi.h>
+#include <BlynkSimpleEsp32.h>
+
+char ssid[] = "YourWiFiName";
+char pass[] = "YourWiFiPassword";
+
+int buzzer = 23;
+
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(buzzer, OUTPUT);
+  digitalWrite(buzzer, LOW);
+
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+}
+
+void loop() {
+  Blynk.run();
+
+  if (WiFi.status() != WL_CONNECTED) {
+    digitalWrite(buzzer, HIGH);  // Alert ON
+  } else {
+    digitalWrite(buzzer, LOW);   // Safe
+  }
+}
