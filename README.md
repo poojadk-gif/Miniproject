@@ -1,14 +1,14 @@
 # Miniproject
-# 🔐 Smart Anti-Theft Wallet using ESP32
+# Smart Anti-Theft Wallet using ESP32
 
-## 📌 Project Overview
+## Project Overview
 This project is a Bluetooth-based anti-theft wallet system using ESP32.  
 The wallet connects to the user's smartphone through Bluetooth.  
 If the wallet goes out of Bluetooth range or disconnects, the buzzer alerts the user immediately.
 
 ---
 
-# 🎯 Objectives
+#  Objectives
 - Prevent wallet loss or theft
 - Provide real-time alert system
 - Create compact portable security device
@@ -16,7 +16,7 @@ If the wallet goes out of Bluetooth range or disconnects, the buzzer alerts the 
 
 ---
 
-# 🧰 Components Required
+#  Components Required
 
 | Component | Quantity |
 |----------|----------|
@@ -30,7 +30,7 @@ If the wallet goes out of Bluetooth range or disconnects, the buzzer alerts the 
 
 ---
 
-# 🔌 Circuit Connections
+# Circuit Connections
 
 ## Buzzer Connection
 | Buzzer Pin | ESP32 Pin |
@@ -50,15 +50,9 @@ If the wallet goes out of Bluetooth range or disconnects, the buzzer alerts the 
 
 ---
 
-## Battery Connection
-
-Battery → TP4056 → ESP32 VIN & GND
-
-⚠️ Do NOT connect battery directly to 3.3V pin.
-
 ---
 
-# ⚙️ Working Principle
+#  Working Principle
 
 1. ESP32 starts Bluetooth with name "SmartWallet"
 2. User connects phone to ESP32
@@ -70,60 +64,3 @@ Battery → TP4056 → ESP32 VIN & GND
 
 ---
 
-# 💻 Arduino Code
-
-```cpp
-#include "BluetoothSerial.h"
-
-BluetoothSerial SerialBT;
-
-const int buzzer = 25;
-const int vibration = 34;
-
-bool isConnected = false;
-bool lastState = false;
-
-void setup() {
-
-  Serial.begin(115200);
-
-  SerialBT.begin("SmartWallet");
-
-  pinMode(buzzer, OUTPUT);
-  pinMode(vibration, INPUT);
-
-  digitalWrite(buzzer, LOW);
-}
-
-void loop() {
-
-  isConnected = SerialBT.hasClient();
-
-  // Detect Bluetooth disconnection
-  if (lastState == true && isConnected == false) {
-
-    Serial.println("Disconnected!");
-
-    digitalWrite(buzzer, HIGH);
-
-    delay(2000);
-
-    digitalWrite(buzzer, LOW);
-  }
-
-  lastState = isConnected;
-
-  // Detect vibration/movement
-  if (digitalRead(vibration) == HIGH) {
-
-    Serial.println("Movement Detected!");
-
-    digitalWrite(buzzer, HIGH);
-
-    delay(1000);
-
-    digitalWrite(buzzer, LOW);
-  }
-
-  delay(200);
-}
